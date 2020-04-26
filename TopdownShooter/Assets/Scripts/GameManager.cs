@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    public Transform projectileParent;
     private List<float> playAreaBounds;
     public List<float> PlayAreaBounds { get { return playAreaBounds; } private set {; } }
     private Camera cam;

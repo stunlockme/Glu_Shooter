@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public Transform weaponHold;
+    public Transform[] weaponSpawns;
     public Weapon startingWeapon;
-    Weapon equippedWeapon;
+    public Weapon[] equippedWeapons;
 
     private void Start()
     {
-        if (startingWeapon != null)
+        equippedWeapons = new Weapon[weaponSpawns.Length];
+        for (int i = 0; i < weaponSpawns.Length; i++)
         {
-            EquipWeapon(startingWeapon);
+            EquipWeapon(startingWeapon, weaponSpawns[i], i);
         }
     }
 
@@ -20,21 +22,18 @@ public class WeaponController : MonoBehaviour
     /// Equip weapon at the desired position.
     /// </summary>
     /// <param name="weaponToEquip">weapon obj to equip</param>
-    public void EquipWeapon(Weapon weaponToEquip)
+    public void EquipWeapon(Weapon weaponToEquip, Transform weaponSpawnPoint, int i)
     {
-        if (equippedWeapon != null)
-        {
-            Destroy(equippedWeapon.gameObject);
-        }
-        equippedWeapon = Instantiate(weaponToEquip, weaponHold.position, weaponHold.rotation) as Weapon;
-        equippedWeapon.transform.parent = weaponHold;
+        equippedWeapons[i] = ObjectPooler.Instance.SpawnFromPool("weapon", weaponSpawnPoint.position, weaponSpawnPoint.rotation,
+                                                                weaponSpawnPoint).GetComponent<Weapon>();
     }
 
-    public void Shoot()
+    public void Shoot(bool canSpray)
     {
-        if (equippedWeapon != null)
+        foreach (Weapon weapon in equippedWeapons)
         {
-            equippedWeapon.Shoot();
+            weapon.Spray(canSpray);
+            weapon.Shoot();
         }
     }
 }

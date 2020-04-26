@@ -14,7 +14,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
     private GameObject parent;
-    public GameObject PoolParent { get { return parent; } private set {; } }
+    public Transform PoolParent { get { return parent.transform; } private set {; } }
 
     private void Start()
     {

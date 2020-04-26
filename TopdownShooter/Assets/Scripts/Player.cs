@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private Vector3 moveInput;
     private PlayerController controller;
     private WeaponController weaponController;
+    private bool sprayPowerup;
 
     private void Start()
     {
@@ -23,7 +24,11 @@ public class Player : MonoBehaviour
         GetInput();
         Vector3 moveVel = moveInput.normalized * moveSpeed;
         controller.Move(moveVel);
-        weaponController.Shoot();
+        if (Input.GetMouseButton(0))
+            sprayPowerup = true;
+        else
+            sprayPowerup = false;
+        weaponController.Shoot(sprayPowerup);
     }
 
     /// <summary>
