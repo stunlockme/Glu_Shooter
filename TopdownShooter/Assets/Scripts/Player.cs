@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(WeaponController))]
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 12.0f;
     private Vector2 startPos;
     private Vector3 moveInput;
     private PlayerController controller;
+    private WeaponController weaponController;
 
     private void Start()
     {
         controller = GetComponent<PlayerController>();
+        weaponController = GetComponent<WeaponController>();
     }
 
     private void Update()
@@ -20,6 +23,7 @@ public class Player : MonoBehaviour
         GetInput();
         Vector3 moveVel = moveInput.normalized * moveSpeed;
         controller.Move(moveVel);
+        weaponController.Shoot();
     }
 
     /// <summary>
