@@ -11,11 +11,11 @@ public class WeaponController : MonoBehaviour
 
     private void Start()
     {
-        equippedWeapons = new Weapon[weaponSpawns.Length];
-        for (int i = 0; i < weaponSpawns.Length; i++)
-        {
-            EquipWeapon(startingWeapon, weaponSpawns[i], i);
-        }
+        //equippedWeapons = new Weapon[weaponSpawns.Length];
+        //for (int i = 0; i < weaponSpawns.Length; i++)
+        //{
+        //    EquipWeapon(startingWeapon, weaponSpawns[i], i);
+        //}
     }
 
     /// <summary>

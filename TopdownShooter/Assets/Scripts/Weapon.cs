@@ -14,6 +14,19 @@ public class Weapon : MonoBehaviour
     private Quaternion lookRight;
     private Quaternion lookLeft = Quaternion.identity;
     private bool canSpray = false;
+    public enum AttackType
+    {
+        Single,
+        Multi,
+        Bezier
+    }
+    public AttackType attackType;
+    public enum WeaponHolderType
+    {
+        Player,
+        Enemy
+    }
+    public WeaponHolderType weaponHolderType;
 
     private void Start()
     {
@@ -28,9 +41,44 @@ public class Weapon : MonoBehaviour
         if(Time.time > nextShotTime)
         {
             nextShotTime = Time.time + msBetweenShots / 1000f;
-            GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool("projectile", muzzle.position, muzzle.rotation, GameManager.Instance.projectileParent);
-            Projectile newProjectile = objFromPool.GetComponent<Projectile>();
-            newProjectile.SetSpeed(muzzleVel);
+            if (attackType == AttackType.Single || attackType == AttackType.Bezier)
+            {
+                SpawnProjectile();
+            }
+            else if(attackType == AttackType.Multi)
+                StartCoroutine(SpawnProjectileWithDelay(5));
+        }
+    }
+
+    private void SpawnProjectile()
+    {
+        GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool("projectile", muzzle.position, muzzle.rotation, GameManager.Instance.projectileParent);
+        Projectile newProjectile = objFromPool.GetComponent<Projectile>();
+        if (weaponHolderType == WeaponHolderType.Enemy)
+        {
+            if(attackType == AttackType.Bezier)
+            {
+                newProjectile.InitBezier(GameManager.Instance.playerObj.transform.position);
+            }
+            else
+                newProjectile.destination = GameManager.Instance.playerObj.transform.position;
+        }
+        if (attackType == AttackType.Bezier)
+            newProjectile.InitBezier(new Vector3(0, 0, 0));
+        newProjectile.SetSpeed(muzzleVel);
+    }
+
+    private IEnumerator SpawnProjectileWithDelay(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            SpawnProjectile();
+            if(i == n - 1)
+            {
+                //Debug.Log("breaking");
+                yield break;
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

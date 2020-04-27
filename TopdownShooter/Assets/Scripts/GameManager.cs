@@ -8,10 +8,13 @@ public class GameManager : Singleton<GameManager>
     private List<float> playAreaBounds;
     public List<float> PlayAreaBounds { get { return playAreaBounds; } private set {; } }
     private Camera cam;
+    public GameObject playerPrefab;
+    public GameObject playerObj;
 
     void Start()
     {
         cam = Camera.main;
+        playerObj = Instantiate(playerPrefab);
         PopulatePlayAreaBounds();
     }
 

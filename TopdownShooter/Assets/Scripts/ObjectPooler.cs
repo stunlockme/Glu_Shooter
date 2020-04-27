@@ -54,6 +54,9 @@ public class ObjectPooler : Singleton<ObjectPooler>
         objectToSpawn.transform.rotation = rotation;
         objectToSpawn.transform.SetParent(parent);
         objectToSpawn.SetActive(true);
+        //IPooledObject pooledObj = objectToSpawn.GetComponent<IPooledObject>();
+        //if (pooledObj != null)
+        //    pooledObj.Init();
 
         poolDictionary[tag].Enqueue(objectToSpawn);
         return objectToSpawn;

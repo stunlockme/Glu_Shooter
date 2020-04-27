@@ -219,7 +219,7 @@ MonoBehaviour:
   muzzle: {fileID: 9134258313081407173}
   projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
     type: 3}
-  msBetweenShots: 20
+  msBetweenShots: 150
   muzzleVel: 30
   leftTarget: {fileID: 8055252911392537388}
   rightTarget: {fileID: 7545084212832847571}
