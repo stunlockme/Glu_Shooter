@@ -9,12 +9,18 @@ public class Enemy : MonoBehaviour
     private Queue<Vector3> pointsOnCurve = new Queue<Vector3>();
     private Vector3 destination;
     public Vector3 StoppingPoint;
+    public float timeInSeconds = 2f;
+    float moveTimer = 0;
 
     private void Start()
     {
         weaponController = GetComponent<WeaponController>();
+    }
+
+    public void InitBezier(Vector3 target)
+    {
         pointsOnCurve = BezierCurve.Instance.PointsOnCurve(transform.position, transform.position + (transform.right * 10.0f),
-                                                    StoppingPoint, 7.0f);
+                                                    target, 7.0f);
         destination = pointsOnCurve.Dequeue();
     }
 
@@ -31,6 +37,13 @@ public class Enemy : MonoBehaviour
                 destination = pointsOnCurve.Dequeue();
             else
             {
+                moveTimer += Time.deltaTime;
+                if(moveTimer > timeInSeconds)
+                {
+                    InitBezier(new Vector3(Random.Range(GameManager.Instance.PlayAreaBounds[2], GameManager.Instance.PlayAreaBounds[3]), 0,
+                                        Random.Range(GameManager.Instance.PlayAreaBounds[0], GameManager.Instance.PlayAreaBounds[1])));
+                    moveTimer = 0;
+                }
                 return;
             }
         }

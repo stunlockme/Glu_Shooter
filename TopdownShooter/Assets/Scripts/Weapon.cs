@@ -8,17 +8,19 @@ public class Weapon : MonoBehaviour
     public Projectile projectile;
     public float msBetweenShots = 100;
     public float muzzleVel = 35;
-    public Transform leftTarget, rightTarget;
+    //public Transform leftTarget, rightTarget;
     float nextShotTime;
     float turnSpeed = 10.0f;
     private Quaternion lookRight;
     private Quaternion lookLeft = Quaternion.identity;
     private bool canSpray = false;
+    private Transform root;
     public enum AttackType
     {
         Single,
         Multi,
-        Bezier
+        Bezier,
+        MultiAndBezier
     }
     public AttackType attackType;
     public enum WeaponHolderType
@@ -27,6 +29,19 @@ public class Weapon : MonoBehaviour
         Enemy
     }
     public WeaponHolderType weaponHolderType;
+    public enum BezierDir
+    {
+        None,
+        Left,
+        Right,
+        Forward
+    }
+    public BezierDir bezierDir;
+
+    private void Awake()
+    {
+        root = transform.root;
+    }
 
     private void Start()
     {
@@ -45,7 +60,7 @@ public class Weapon : MonoBehaviour
             {
                 SpawnProjectile();
             }
-            else if(attackType == AttackType.Multi)
+            else if(attackType == AttackType.Multi || attackType == AttackType.MultiAndBezier)
                 StartCoroutine(SpawnProjectileWithDelay(5));
         }
     }
@@ -56,15 +71,25 @@ public class Weapon : MonoBehaviour
         Projectile newProjectile = objFromPool.GetComponent<Projectile>();
         if (weaponHolderType == WeaponHolderType.Enemy)
         {
-            if(attackType == AttackType.Bezier)
+            if(attackType == AttackType.Bezier || attackType == AttackType.MultiAndBezier)
             {
-                newProjectile.InitBezier(GameManager.Instance.playerObj.transform.position);
+                Debug.Log("attacktype-> " + attackType);
+                //newProjectile.toRotate = root;
+                if(bezierDir == BezierDir.Left)
+                    newProjectile.InitBezier(GameManager.Instance.playerObj.transform.position, -muzzle.right);
+                else if (bezierDir == BezierDir.Right)
+                    newProjectile.InitBezier(GameManager.Instance.playerObj.transform.position, muzzle.right);
+                else
+                    newProjectile.InitBezier(GameManager.Instance.playerObj.transform.position, muzzle.forward);
             }
             else
+            {
+                Debug.Log("attacktype-> " + attackType);
                 newProjectile.destination = GameManager.Instance.playerObj.transform.position;
+            }
         }
-        if (attackType == AttackType.Bezier)
-            newProjectile.InitBezier(new Vector3(0, 0, 0));
+        //if (attackType == AttackType.Bezier)
+        //    newProjectile.InitBezier(new Vector3(0, 0, 0));
         newProjectile.SetSpeed(muzzleVel);
     }
 

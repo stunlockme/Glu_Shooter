@@ -20,9 +20,10 @@ public class Projectile : MonoBehaviour
         };
     }
 
-    public void InitBezier(Vector3 target)
+    public void InitBezier(Vector3 target, Vector3 curveDir)
     {
-        pointsOnCurve = BezierCurve.Instance.PointsOnCurve(transform.position, transform.position + (transform.right * 10.0f),
+        //Debug.Log("target-> " + target + ", " + GameManager.Instance.playerObj.transform.position);       
+        pointsOnCurve = BezierCurve.Instance.PointsOnCurve(transform.position, transform.position + (curveDir * 10.0f),
             target, 7.0f);
         destination = pointsOnCurve.Dequeue();
     }
@@ -44,6 +45,7 @@ public class Projectile : MonoBehaviour
                 destination = Vector3.zero;
                 gameObject.transform.parent = ObjectPooler.Instance?.PoolParent.transform;
             }
+            //Debug.Log("Destination-> " + destination);
         }
         transform.position = Vector3.MoveTowards(transform.position, destination, 10f * Time.fixedDeltaTime);
     }
@@ -76,5 +78,18 @@ public class Projectile : MonoBehaviour
             gameObject.SetActive(false);
             gameObject.transform.parent = ObjectPooler.Instance?.PoolParent.transform;
         }
+    }
+
+    private bool IsOutofPlayArea()
+    {
+        if (transform.position.z > GameManager.Instance?.PlayAreaBounds[0] ||
+            transform.position.z < GameManager.Instance?.PlayAreaBounds[1] ||
+            transform.position.x < GameManager.Instance?.PlayAreaBounds[2] ||
+            transform.position.x > GameManager.Instance?.PlayAreaBounds[3])
+        {
+            return true;
+        }
+        else
+            return false;
     }
 }

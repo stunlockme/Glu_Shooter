@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public Transform projectileParent;
+    public Transform enemyParent;
     private List<float> playAreaBounds;
     public List<float> PlayAreaBounds { get { return playAreaBounds; } private set {; } }
     private Camera cam;
@@ -14,8 +15,27 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         cam = Camera.main;
-        playerObj = Instantiate(playerPrefab);
+        playerObj = Instantiate(playerPrefab, new Vector3(1.0f, 0, 0), playerPrefab.transform.rotation);
         PopulatePlayAreaBounds();
+        //SpawnEnemies();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+            SpawnEnemies();
+    }
+
+    private void SpawnEnemies()
+    {
+        GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool("enemy1", new Vector3(0, 0, playAreaBounds[0] + 2.0f), Quaternion.Euler(0, 180f, 0), enemyParent);
+        Enemy newEnemy = enemyObj.GetComponent<Enemy>();
+        newEnemy.InitBezier(new Vector3(Random.Range(PlayAreaBounds[2], PlayAreaBounds[3]), 0,
+                                    Random.Range(PlayAreaBounds[0], PlayAreaBounds[1])));
+        enemyObj = ObjectPooler.Instance.SpawnFromPool("enemy4", new Vector3(0, 0, playAreaBounds[0] + 2.0f), Quaternion.Euler(0, 180f, 0), enemyParent);
+        newEnemy = enemyObj.GetComponent<Enemy>();
+        newEnemy.InitBezier(new Vector3(Random.Range(PlayAreaBounds[2], PlayAreaBounds[3]), 0,
+                            Random.Range(PlayAreaBounds[0], PlayAreaBounds[1])));
     }
 
     /// <summary>

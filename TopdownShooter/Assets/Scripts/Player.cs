@@ -24,10 +24,10 @@ public class Player : MonoBehaviour
         GetInput();
         Vector3 moveVel = moveInput.normalized * moveSpeed;
         controller.Move(moveVel);
-        if (Input.GetMouseButton(0))
-            sprayPowerup = true;
-        else
-            sprayPowerup = false;
+        //if (Input.GetMouseButton(0))
+        //    sprayPowerup = true;
+        //else
+        //    sprayPowerup = false;
         weaponController.Shoot(sprayPowerup);
     }
 
