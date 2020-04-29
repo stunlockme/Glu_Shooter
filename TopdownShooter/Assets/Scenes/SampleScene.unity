@@ -598,7 +598,15 @@ MonoBehaviour:
     prefab: {fileID: 3863350867118746017, guid: d7bc0d925c78f1943afc3a43e8bb9c02,
       type: 3}
     size: 10
+  - tag: enemy2
+    prefab: {fileID: 1927858635039399909, guid: 25e565e971fb90f4aacef9d4f4811236,
+      type: 3}
+    size: 10
   - tag: enemy4
+    prefab: {fileID: 6978740221695211875, guid: cc747ad2fd9e3484a83654d169dd66b1,
+      type: 3}
+    size: 10
+  - tag: purple
     prefab: {fileID: 6978740221695211875, guid: cc747ad2fd9e3484a83654d169dd66b1,
       type: 3}
     size: 10
@@ -884,6 +892,13 @@ MonoBehaviour:
   playerPrefab: {fileID: 7541238746793417940, guid: 0465217ceec7b414b849506f1089a391,
     type: 3}
   playerObj: {fileID: 0}
+  waves:
+  - enemyCount: 5
+    enemyTags:
+    - enemy1
+    timeBetweenSpawns: 4
+  enemy: {fileID: 5397076676570255655, guid: d7bc0d925c78f1943afc3a43e8bb9c02, type: 3}
+  level: 1
 --- !u!4 &1761981189
 Transform:
   m_ObjectHideFlags: 0

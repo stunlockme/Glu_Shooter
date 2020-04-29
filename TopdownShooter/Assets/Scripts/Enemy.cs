@@ -3,18 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(WeaponController))]
-public class Enemy : MonoBehaviour
+public class Enemy : LivingEntity
 {
+    public new string tag;
     private WeaponController weaponController;
     private Queue<Vector3> pointsOnCurve = new Queue<Vector3>();
     private Vector3 destination;
-    public Vector3 StoppingPoint;
+    //public Vector3 StoppingPoint;
     public float timeInSeconds = 2f;
     float moveTimer = 0;
+    Vector2 offsetSize;
+    //public Stat healthBar;
 
-    private void Start()
+    protected override void Start()
+    {
+        base.Start();
+        weaponController = GetComponent<WeaponController>();
+        offsetSize.x = GetComponent<Renderer>().bounds.size.x * 0.5f;
+        offsetSize.y = GetComponent<Renderer>().bounds.size.z * 0.5f;
+    }
+
+    public void Init(float _msBetweenShots, float _muzzleVel , float _damage, int _numOfMultishot, float _delayBetweenMultipleShots)
     {
         weaponController = GetComponent<WeaponController>();
+        Debug.Log("wepons-> " + weaponController);
+        foreach (Weapon weapon in weaponController.equippedWeapons)
+        {
+            weapon.Init(_msBetweenShots, _muzzleVel, _damage, _numOfMultishot, _delayBetweenMultipleShots);
+        }
     }
 
     public void InitBezier(Vector3 target)
@@ -27,6 +43,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         weaponController.Shoot(false);
+        StayInBounds();
     }
 
     private void MoveToDestination()
@@ -40,8 +57,8 @@ public class Enemy : MonoBehaviour
                 moveTimer += Time.deltaTime;
                 if(moveTimer > timeInSeconds)
                 {
-                    InitBezier(new Vector3(Random.Range(GameManager.Instance.PlayAreaBounds[2], GameManager.Instance.PlayAreaBounds[3]), 0,
-                                        Random.Range(GameManager.Instance.PlayAreaBounds[0], GameManager.Instance.PlayAreaBounds[1])));
+                    InitBezier(new Vector3(Random.Range(GameManager.Instance.PlayAreaBounds[2] + offsetSize.x, GameManager.Instance.PlayAreaBounds[3] - offsetSize.x), 0,
+                                        Random.Range(GameManager.Instance.PlayAreaBounds[0] + offsetSize.y, GameManager.Instance.PlayAreaBounds[1] - offsetSize.y)));
                     moveTimer = 0;
                 }
                 return;
@@ -56,17 +73,24 @@ public class Enemy : MonoBehaviour
         RotateTowardsTarget();
     }
 
-    private bool InsidePlayArea()
+    private void StayInBounds()
     {
-        if (transform.position.z > GameManager.Instance?.PlayAreaBounds[0] ||
-            transform.position.z < GameManager.Instance?.PlayAreaBounds[1] ||
-            transform.position.x < GameManager.Instance?.PlayAreaBounds[2] ||
-            transform.position.x > GameManager.Instance?.PlayAreaBounds[3])
+        if (destination.z > GameManager.Instance?.PlayAreaBounds[0] - offsetSize.y)   //top
         {
-            return false;
+            destination = new Vector3(transform.position.x, transform.position.y, GameManager.Instance.PlayAreaBounds[0] - offsetSize.y);
         }
-        else
-            return true;
+        else if (destination.z < GameManager.Instance?.PlayAreaBounds[1] + offsetSize.y)  //bottom
+        {
+            destination = new Vector3(transform.position.x, transform.position.y, GameManager.Instance.PlayAreaBounds[1] + offsetSize.y);
+        }
+        else if (destination.x < GameManager.Instance?.PlayAreaBounds[2] + offsetSize.x) //left
+        {
+            destination = new Vector3(GameManager.Instance.PlayAreaBounds[2] + offsetSize.x, transform.position.y, transform.position.z);
+        }
+        else if (destination.x > GameManager.Instance?.PlayAreaBounds[3] - offsetSize.x) //right
+        {
+            destination = new Vector3(GameManager.Instance.PlayAreaBounds[3] - offsetSize.x, transform.position.y, transform.position.z);
+        }
     }
 
     private void RotateTowardsTarget()

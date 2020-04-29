@@ -5,9 +5,12 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public Transform muzzle;
-    public Projectile projectile;
+    //public Projectile projectile;
     public float msBetweenShots = 100;
     public float muzzleVel = 35;
+    public float damage = 2f;
+    public int numOfMultishot = 2;
+    public float delayBetweenMultipleShots = 1.0f;
     //public Transform leftTarget, rightTarget;
     float nextShotTime;
     float turnSpeed = 10.0f;
@@ -37,6 +40,12 @@ public class Weapon : MonoBehaviour
         Forward
     }
     public BezierDir bezierDir;
+    public LayerMask projectileCollisionMask;
+    private enum ProjectileType
+    {
+        Red,
+        Purple
+    }
 
     private void Awake()
     {
@@ -46,6 +55,15 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         lookRight = Quaternion.Euler(0, 45, 0);
+    }
+
+    public void Init(float _msBetweenShots, float _muzzleVel, float _damage, int _numOfMultishot, float _delayBetweenMultipleShots)
+    {
+        msBetweenShots = _msBetweenShots;
+        muzzleVel = _muzzleVel;
+        damage = _damage;
+        numOfMultishot = _numOfMultishot;
+        delayBetweenMultipleShots = _delayBetweenMultipleShots;
     }
 
     /// <summary>
@@ -61,14 +79,15 @@ public class Weapon : MonoBehaviour
                 SpawnProjectile();
             }
             else if(attackType == AttackType.Multi || attackType == AttackType.MultiAndBezier)
-                StartCoroutine(SpawnProjectileWithDelay(5));
+                StartCoroutine(SpawnProjectileWithDelay(numOfMultishot));
         }
     }
 
     private void SpawnProjectile()
     {
-        GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool("projectile", muzzle.position, muzzle.rotation, GameManager.Instance.projectileParent);
+        GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool("projectile", muzzle.position, transform.rotation, GameManager.Instance.projectileParent);
         Projectile newProjectile = objFromPool.GetComponent<Projectile>();
+        newProjectile.Init(projectileCollisionMask, damage);
         if (weaponHolderType == WeaponHolderType.Enemy)
         {
             if(attackType == AttackType.Bezier || attackType == AttackType.MultiAndBezier)
@@ -84,8 +103,24 @@ public class Weapon : MonoBehaviour
             }
             else
             {
-                Debug.Log("attacktype-> " + attackType);
+                //Debug.Log("attacktype-> " + attackType);
                 newProjectile.destination = GameManager.Instance.playerObj.transform.position;
+            }
+        }
+        else
+        {
+            if (attackType == AttackType.Bezier || attackType == AttackType.MultiAndBezier)
+            {
+                Debug.Log("attacktype-> " + attackType);
+                Vector3 target = new Vector3(0, 0, GameManager.Instance.PlayAreaBounds[0]);
+                if(GameManager.Instance.enemyParent.childCount > 0)
+                    target = GameManager.Instance.enemyParent.GetChild(Random.Range(0, GameManager.Instance.enemyParent.childCount)).transform.position;
+                if (bezierDir == BezierDir.Left)
+                    newProjectile.InitBezier(target, -muzzle.right);
+                else if (bezierDir == BezierDir.Right)
+                    newProjectile.InitBezier(target, muzzle.right);
+                else
+                    newProjectile.InitBezier(target, muzzle.forward);
             }
         }
         //if (attackType == AttackType.Bezier)
@@ -103,7 +138,7 @@ public class Weapon : MonoBehaviour
                 //Debug.Log("breaking");
                 yield break;
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(delayBetweenMultipleShots);
         }
     }
 

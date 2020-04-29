@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(WeaponController))]
-public class Player : MonoBehaviour
+public class Player : LivingEntity
 {
     public float moveSpeed = 12.0f;
     private Vector2 startPos;
@@ -13,8 +13,9 @@ public class Player : MonoBehaviour
     private WeaponController weaponController;
     private bool sprayPowerup;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         controller = GetComponent<PlayerController>();
         weaponController = GetComponent<WeaponController>();
     }

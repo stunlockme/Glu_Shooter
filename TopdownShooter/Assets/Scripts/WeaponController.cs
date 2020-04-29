@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public Transform[] weaponSpawns;
-    public Weapon startingWeapon;
+    //public Transform[] weaponSpawns;
+    //public Weapon startingWeapon;
     public Weapon[] equippedWeapons;
 
     private void Start()
