@@ -31,6 +31,9 @@ public class Player : LivingEntity
         weaponController.Shoot(sprayPowerup);
     }
 
+    /// <summary>
+    /// Disable spray after sprayTimer exceeds sprayTime.
+    /// </summary>
     private void CheckForPowerup()
     {
         if(sprayPowerup)

@@ -22,6 +22,9 @@ public class MenuScript : MonoBehaviour
         previousHighScoreText.text = "HighScore-> " + highScore.ToString();
     }
 
+    /// <summary>
+    /// Check which levels have been unlocked.
+    /// </summary>
     private void CheckUnlockedLevels()
     {
         lvl1 = PlayerPrefs.GetInt("Level1", 0);
@@ -70,6 +73,10 @@ public class MenuScript : MonoBehaviour
         backBtnObj.SetActive(false);
     }
 
+    /// <summary>
+    /// assign level and load game scene.
+    /// </summary>
+    /// <param name="lvlNumber">level number to determine enemy stats</param>
     public void SetLevel(int lvlNumber)
     {
         PlayerPrefs.SetInt("LevelNumber", lvlNumber);

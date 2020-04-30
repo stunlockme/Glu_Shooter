@@ -966,11 +966,11 @@ MonoBehaviour:
   - tag: Spray
     prefab: {fileID: 2428268822061571294, guid: af5b7e1144a1d994aadcb94272de195c,
       type: 3}
-    size: 10
+    size: 20
   - tag: Health
     prefab: {fileID: 2428268822061571294, guid: eeb626db3ae564d4b83f4bb39f585695,
       type: 3}
-    size: 10
+    size: 20
   - tag: enemy5
     prefab: {fileID: 3867440299233217455, guid: 5ffb50d1df39b454f8b7927ffa6c78d1,
       type: 3}
@@ -1465,27 +1465,27 @@ MonoBehaviour:
     - enemy1
     - enemy2
     - enemy2
-    timeBetweenSpawns: 5
+    timeBetweenSpawns: 3.5
   - enemyCount: 11
     enemyTags:
     - enemy1
     - enemy2
     - enemy3
     - enemy3
-    timeBetweenSpawns: 7
+    timeBetweenSpawns: 3
   - enemyCount: 6
     enemyTags:
     - enemy4
     - enemy4
     - enemy2
-    timeBetweenSpawns: 8
+    timeBetweenSpawns: 5
   - enemyCount: 8
     enemyTags:
     - enemy4
     - enemy4
     - enemy2
     - enemy1
-    timeBetweenSpawns: 7
+    timeBetweenSpawns: 5.5
   enemy: {fileID: 5397076676570255655, guid: d7bc0d925c78f1943afc3a43e8bb9c02, type: 3}
   level: 1
 --- !u!4 &1761981189

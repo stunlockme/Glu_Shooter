@@ -25,6 +25,12 @@ public class Projectile : MonoBehaviour
         damage = _damage;
     }
 
+    /// <summary>
+    /// Init bezier points from position to target.
+    /// Reset middle point to within playareabounds if it exceeds.
+    /// </summary>
+    /// <param name="target">destination to reach</param>
+    /// <param name="curveDir">direction of bezier points</param>
     public void InitBezier(Vector3 target, Vector3 curveDir)
     {
         //Debug.Log("target-> " + target + ", " + GameManager.Instance.playerObj.transform.position);
@@ -73,6 +79,9 @@ public class Projectile : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.fixedDeltaTime);
     }
 
+    /// <summary>
+    /// check for collision in objects forward direction.
+    /// </summary>
     void CheckCollisions()
     {
         Ray ray = new Ray(transform.position, transform.forward);
@@ -86,6 +95,10 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// If object hit Idamageable object, will damage object and disableself.
+    /// </summary>
+    /// <param name="hit">hit info</param>
     void OnHitObject(RaycastHit hit)
     {
         //Debug.Log(hit.collider.name);
@@ -128,18 +141,5 @@ public class Projectile : MonoBehaviour
             gameObject.SetActive(false);
             gameObject.transform.parent = ObjectPooler.Instance?.PoolParent.transform;
         }
-    }
-
-    private bool IsOutofPlayArea()
-    {
-        if (transform.position.z > GameManager.Instance?.PlayAreaBounds[0] ||
-            transform.position.z < GameManager.Instance?.PlayAreaBounds[1] ||
-            transform.position.x < GameManager.Instance?.PlayAreaBounds[2] ||
-            transform.position.x > GameManager.Instance?.PlayAreaBounds[3])
-        {
-            return true;
-        }
-        else
-            return false;
     }
 }

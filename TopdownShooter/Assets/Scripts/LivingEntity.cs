@@ -5,7 +5,7 @@ using UnityEngine;
 public class LivingEntity : MonoBehaviour, IDamageable
 {
     public float startingHealth;
-    protected float health;
+    public float health;
     protected bool dead;
     public Stat healthBar;
     public event System.Action OnDeath;
@@ -26,6 +26,10 @@ public class LivingEntity : MonoBehaviour, IDamageable
             Die();
     }
 
+    /// <summary>
+    /// Invoke ondeath event.
+    /// Increase score if enemy died.
+    /// </summary>
     protected void Die()
     {
         if (OnDeath != null)

@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     public int numOfMultishot = 2;
     public float delayBetweenMultipleShots = 1.0f;
     float nextShotTime;
-    float turnSpeed = 10.0f;
+    float turnSpeed = 25.0f;
     private Quaternion lookRight;
     private Quaternion lookLeft = Quaternion.identity;
     private bool canSpray = false;
@@ -58,6 +58,14 @@ public class Weapon : MonoBehaviour
         lookRight = Quaternion.Euler(0, 45, 0);
     }
 
+    /// <summary>
+    /// Init weapon stats.
+    /// </summary>
+    /// <param name="_msBetweenShots">milli seconds between each attack</param>
+    /// <param name="_muzzleVel">speed of projectile</param>
+    /// <param name="_damage">damage of projectile</param>
+    /// <param name="_numOfMultishot">num of attacks together</param>
+    /// <param name="_delayBetweenMultipleShots">delay between multiple attacks</param>
     public void Init(float _msBetweenShots, float _muzzleVel, float _damage, int _numOfMultishot, float _delayBetweenMultipleShots)
     {
         msBetweenShots = _msBetweenShots;
@@ -68,7 +76,7 @@ public class Weapon : MonoBehaviour
     }
 
     /// <summary>
-    /// spawn projectile from objectpool. 
+    /// shoot based on attackType. 
     /// </summary>
     public void Shoot()
     {
@@ -84,6 +92,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// spawn projectile based on projectileType.
+    /// Initialize projectile bezier direction.
+    /// Target is set using weaponHolderType(enemy chooses player, player chooses enemy).
+    /// </summary>
     private void SpawnProjectile()
     {
         string projectileTag = string.Empty;
@@ -93,7 +106,7 @@ public class Weapon : MonoBehaviour
             projectileTag = "purple";
         else
             projectileTag = "yellow";
-        Debug.Log("projectileTag-> " + projectileTag);
+        //Debug.Log("projectileTag-> " + projectileTag);
         GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool(projectileTag, muzzle.position, transform.rotation, GameManager.Instance.projectileParent);
         Projectile newProjectile = objFromPool.GetComponent<Projectile>();
         newProjectile.Init(projectileCollisionMask, damage);
@@ -157,7 +170,7 @@ public class Weapon : MonoBehaviour
     private void FixedUpdate()
     {
         if (canSpray)
-            RotateTowardsTarget();
+            RotateLeftToRight();
         else
             ResetRotation();
     }
@@ -167,7 +180,7 @@ public class Weapon : MonoBehaviour
         transform.localRotation = Quaternion.identity;
     }
 
-    private void RotateTowardsTarget()
+    private void RotateLeftToRight()
     {
         if (Quaternion.Dot(transform.localRotation, lookRight) <= -0.9999f || Quaternion.Dot(transform.localRotation, lookRight) >= 0.9999f)
         {

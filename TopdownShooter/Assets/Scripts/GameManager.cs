@@ -28,6 +28,7 @@ public class GameManager : Singleton<GameManager>
     public int score;
     public int highScore;
     public float nextPowerupTime;
+    private float timeBetweenPowerups;
     public string[] powerupTags;
     public GameObject mainMenuBtnObj;
     public GameObject playerObj;
@@ -53,11 +54,10 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        timeBetweenPowerups = 15.0f;
         level = PlayerPrefs.GetInt("LevelNumber", 1);
-        Debug.Log("levelNumber-> " + level);
         scoreText.text = "Score-> " + score.ToString();
         highScore = PlayerPrefs.GetInt("HighScore", 0);
-        Debug.Log("highScore-> " + highScore);
         NextWave();
     }
 
@@ -71,7 +71,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (enemiesRemainingToSpawn > 0 && Time.time > nextPowerupTime)
         {
-            nextPowerupTime = Time.time + nextPowerupTime;
+            nextPowerupTime = Time.time + timeBetweenPowerups;
             string powerupTag = powerupTags[Random.Range(0, powerupTags.Length)];
             GameObject powerupObj = ObjectPooler.Instance.SpawnFromPool(powerupTag, new Vector3(Random.Range(playAreaBounds[2], playAreaBounds[3]), 0, playAreaBounds[0] + 2.0f),
                                                                     Quaternion.Euler(0, 180f, 0), powerupParent);
@@ -79,6 +79,11 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    /// <summary>
+    /// Spawn enemy using enemytags.
+    /// Enemy stats increase based on level, currentWaveNumber.
+    /// Randomly choose enemy destination within playareabounds.
+    /// </summary>
     private void SpawnEnemy()
     {
         if (enemiesRemainingToSpawn > 0 && Time.time > nextSpawnTime)
@@ -148,9 +153,9 @@ public class GameManager : Singleton<GameManager>
                 numOfMultishot = (2 * level) + currentWaveNumber;
                 delayBetweenMultipleshots = 1.0f / (level + currentWaveNumber);
             }
-            Debug.Log("msBetweenShots-> " + msBetweenShots);
-            Debug.Log("muzzleVe-> " + muzzleVel);
-            Debug.Log("damage-> " + damage);
+            //Debug.Log("msBetweenShots-> " + msBetweenShots);
+            //Debug.Log("muzzleVe-> " + muzzleVel);
+            //Debug.Log("damage-> " + damage);
             newEnemy.Init(msBetweenShots, muzzleVel, damage, numOfMultishot, delayBetweenMultipleshots);
             newEnemy.InitBezier(new Vector3(Random.Range(PlayAreaBounds[2], PlayAreaBounds[3]), 0,
                                     Random.Range(PlayAreaBounds[0], PlayAreaBounds[1])));
@@ -165,7 +170,7 @@ public class GameManager : Singleton<GameManager>
         {
             NextWave();
         }
-        print("Enemy died");
+        //print("Enemy died");
     }
 
     private void OnPlayerDeath()
@@ -178,6 +183,11 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(0);
     }
 
+    /// <summary>
+    /// spawn the next wave.
+    /// Increase level when currentWaveNumber exceeds total number of waves.
+    /// Store level completion data (used to display level buttons in mainmenu).
+    /// </summary>
     private void NextWave()
     {
         currentWaveNumber++;
