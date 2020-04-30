@@ -203,6 +203,7 @@ public class GameManager : Singleton<GameManager>
         if(level == 2)
         {
             PlayerPrefs.SetInt("Level2", 1);
+            levelCompleteText.text = "Level One Complete";
             Debug.Log("setting level2");
         }
         else if(level == 3)

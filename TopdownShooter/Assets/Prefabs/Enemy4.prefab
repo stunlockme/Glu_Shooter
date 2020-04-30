@@ -198,7 +198,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &141706940522258807
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +397,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &3813117633332610273
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +457,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &4410465678765876032
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +727,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &6157158701636540303
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,7 +847,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &6157158702311311409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,7 +1345,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &8797876941276335258
 GameObject:
   m_ObjectHideFlags: 0

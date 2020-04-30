@@ -89,7 +89,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &3416764546619833942
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,7 +560,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
-  projectileType: 0
+  projectileType: 2
 --- !u!1 &6090536311859794875
 GameObject:
   m_ObjectHideFlags: 0
