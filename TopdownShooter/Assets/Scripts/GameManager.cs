@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
@@ -23,10 +24,12 @@ public class GameManager : Singleton<GameManager>
     public Text scoreText;
     public Text waveNumberText;
     public Text levelNumberText;
+    public Text levelCompleteText;
     public int score;
     public int highScore;
     public float nextPowerupTime;
     public string[] powerupTags;
+    public GameObject mainMenuBtnObj;
     public GameObject playerObj;
 
     public Wave[] waves;
@@ -44,6 +47,8 @@ public class GameManager : Singleton<GameManager>
         cam = Camera.main;
         playerObj = Instantiate(playerPrefab, new Vector3(3.0f, 0, -12f), Quaternion.identity);
         PopulatePlayAreaBounds();
+        Player player = playerObj.GetComponent<Player>();
+        player.OnDeath += OnPlayerDeath;
     }
 
     void Start()
@@ -161,6 +166,16 @@ public class GameManager : Singleton<GameManager>
             NextWave();
         }
         print("Enemy died");
+    }
+
+    private void OnPlayerDeath()
+    {
+        mainMenuBtnObj.SetActive(true);
+    }
+
+    public void LoadMainmenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void NextWave()

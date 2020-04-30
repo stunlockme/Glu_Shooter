@@ -17,10 +17,6 @@ public class MenuScript : MonoBehaviour
     private void Start()
     {
         PlayerPrefs.SetInt("Level1", 1);
-        //PlayerPrefs.SetInt("Level2", 0);
-        //PlayerPrefs.SetInt("Level3", 0);
-        //PlayerPrefs.SetInt("Level4", 0);
-        //PlayerPrefs.SetInt("Level5", 0);
         CheckUnlockedLevels();
         highScore = PlayerPrefs.GetInt("HighScore", 0);
         previousHighScoreText.text = "HighScore-> " + highScore.ToString();
