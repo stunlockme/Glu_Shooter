@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b9fb058f13bd599409673132a8410b2d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,13 +123,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6d16e14d7a15046b4fd70bb53adea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 20
+  startingHealth: 60
   healthBar:
     barScript: {fileID: 5322648360340411522}
-    maxValue: 20
-    currentValue: 20
+    maxValue: 60
+    currentValue: 60
   tag: enemy2
   timeInSeconds: 2
+  pointsAwardedOnDeath: 10
 --- !u!1 &8930400297179121644
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,8 +318,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 8930400297179121654}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 1500
   muzzleVel: 15
   damage: 2
@@ -330,6 +329,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 1024
+  projectileType: 2
 --- !u!1 &8930400297179121649
 GameObject:
   m_ObjectHideFlags: 0

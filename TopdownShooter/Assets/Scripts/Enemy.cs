@@ -13,7 +13,7 @@ public class Enemy : LivingEntity
     public float timeInSeconds = 2f;
     float moveTimer = 0;
     Vector2 offsetSize;
-    //public Stat healthBar;
+    public int pointsAwardedOnDeath;
 
     protected override void Start()
     {

@@ -11,7 +11,9 @@ public class Player : LivingEntity
     private Vector3 moveInput;
     private PlayerController controller;
     private WeaponController weaponController;
-    private bool sprayPowerup;
+    public bool sprayPowerup;
+    public float sprayTime = 15f;
+    private float sprayTimer = 0;
 
     protected override void Start()
     {
@@ -25,11 +27,21 @@ public class Player : LivingEntity
         GetInput();
         Vector3 moveVel = moveInput.normalized * moveSpeed;
         controller.Move(moveVel);
-        //if (Input.GetMouseButton(0))
-        //    sprayPowerup = true;
-        //else
-        //    sprayPowerup = false;
+        CheckForPowerup();
         weaponController.Shoot(sprayPowerup);
+    }
+
+    private void CheckForPowerup()
+    {
+        if(sprayPowerup)
+        {
+            sprayTimer += Time.deltaTime;
+            if(sprayTimer > sprayTime)
+            {
+                sprayPowerup = false;
+                sprayTimer = 0;
+            }
+        }
     }
 
     /// <summary>

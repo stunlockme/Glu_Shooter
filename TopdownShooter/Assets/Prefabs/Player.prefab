@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 7541238746793417964}
   m_Layer: 10
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -287,7 +287,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3f03195a3f090f047901c381b5c8abc2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -349,6 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a70bae6c72e9fc74793c3d75a2cbc585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sideGunObj: {fileID: 568385175999371280}
 --- !u!114 &7541238746793417941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,12 +362,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65721c794afbc5b4eb8e786bafd26205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 1000
+  startingHealth: 100
   healthBar:
     barScript: {fileID: 1624917304515630363}
-    maxValue: 1000
-    currentValue: 1000
+    maxValue: 100
+    currentValue: 100
   moveSpeed: 15
+  sprayPowerup: 0
+  sprayTime: 15
 --- !u!114 &7541238746793417964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,6 +484,11 @@ PrefabInstance:
         type: 3}
       propertyPath: damage
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8204044388421667535, guid: aebb52ccdc962b246ae63029be552f11,
+        type: 3}
+      propertyPath: muzzleVel
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 8973965887452738692, guid: aebb52ccdc962b246ae63029be552f11,
         type: 3}
@@ -614,6 +622,11 @@ PrefabInstance:
       propertyPath: projectileCollisionMask.m_Bits
       value: 512
       objectReference: {fileID: 0}
+    - target: {fileID: 8204044388421667535, guid: aebb52ccdc962b246ae63029be552f11,
+        type: 3}
+      propertyPath: projectileType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8973965887452738692, guid: aebb52ccdc962b246ae63029be552f11,
         type: 3}
       propertyPath: m_Name
@@ -745,6 +758,11 @@ PrefabInstance:
         type: 3}
       propertyPath: projectileCollisionMask.m_Bits
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 8204044388421667535, guid: aebb52ccdc962b246ae63029be552f11,
+        type: 3}
+      propertyPath: projectileType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973965887452738692, guid: aebb52ccdc962b246ae63029be552f11,
         type: 3}
@@ -893,6 +911,11 @@ PrefabInstance:
       propertyPath: projectileCollisionMask.m_Bits
       value: 512
       objectReference: {fileID: 0}
+    - target: {fileID: 8204044388421667535, guid: aebb52ccdc962b246ae63029be552f11,
+        type: 3}
+      propertyPath: projectileType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8973965887452738692, guid: aebb52ccdc962b246ae63029be552f11,
         type: 3}
       propertyPath: m_Name
@@ -1039,6 +1062,11 @@ PrefabInstance:
         type: 3}
       propertyPath: projectileCollisionMask.m_Bits
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 8204044388421667535, guid: aebb52ccdc962b246ae63029be552f11,
+        type: 3}
+      propertyPath: projectileType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973965887452738692, guid: aebb52ccdc962b246ae63029be552f11,
         type: 3}

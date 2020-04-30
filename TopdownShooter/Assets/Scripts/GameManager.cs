@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -14,10 +15,18 @@ public class GameManager : Singleton<GameManager>
 
     public Transform projectileParent;
     public Transform enemyParent;
+    public Transform powerupParent;
     private List<float> playAreaBounds;
     public List<float> PlayAreaBounds { get { return playAreaBounds; } private set {; } }
     private Camera cam;
     public GameObject playerPrefab;
+    public Text scoreText;
+    public Text waveNumberText;
+    public Text levelNumberText;
+    public int score;
+    public int highScore;
+    public float nextPowerupTime;
+    public string[] powerupTags;
     public GameObject playerObj;
 
     public Wave[] waves;
@@ -39,12 +48,30 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        level = PlayerPrefs.GetInt("LevelNumber", 1);
+        Debug.Log("levelNumber-> " + level);
+        scoreText.text = "Score-> " + score.ToString();
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
+        Debug.Log("highScore-> " + highScore);
         NextWave();
     }
 
     private void Update()
     {
         SpawnEnemy();
+        SpawnPowerup();
+    }
+
+    private void SpawnPowerup()
+    {
+        if (enemiesRemainingToSpawn > 0 && Time.time > nextPowerupTime)
+        {
+            nextPowerupTime = Time.time + nextPowerupTime;
+            string powerupTag = powerupTags[Random.Range(0, powerupTags.Length)];
+            GameObject powerupObj = ObjectPooler.Instance.SpawnFromPool(powerupTag, new Vector3(Random.Range(playAreaBounds[2], playAreaBounds[3]), 0, playAreaBounds[0] + 2.0f),
+                                                                    Quaternion.Euler(0, 180f, 0), powerupParent);
+            Debug.Log("spawning powerup-> " + powerupObj);
+        }
     }
 
     private void SpawnEnemy()
@@ -53,7 +80,7 @@ public class GameManager : Singleton<GameManager>
         {
             enemiesRemainingToSpawn--;
             nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
-            GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool(currentWave.enemyTags[Random.Range(0, currentWave.enemyTags.Count)], new Vector3(0, 0, playAreaBounds[0] + 2.0f),
+            GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool(currentWave.enemyTags[Random.Range(0, currentWave.enemyTags.Count)], new Vector3(Random.Range(playAreaBounds[2], playAreaBounds[3]), 0, playAreaBounds[0] + 2.0f),
                                                                     Quaternion.Euler(0, 180f, 0), enemyParent);
             Enemy newEnemy = enemyObj.GetComponent<Enemy>();
             float msBetweenShots = 0, muzzleVel = 0, damage = 0, delayBetweenMultipleshots = 0;
@@ -76,7 +103,19 @@ public class GameManager : Singleton<GameManager>
                     muzzleVel = 20f;
                 if (muzzleVel < 5f)
                     muzzleVel = 5f;
-                damage = 3.0f * level * (currentWaveNumber / 2);
+                damage = 3.0f + level + currentWaveNumber; ;
+                numOfMultishot = (2 * level) + currentWaveNumber;
+                delayBetweenMultipleshots = 1.0f / (level + currentWaveNumber);
+            }
+            else if (newEnemy.tag == "enemy3")
+            {
+                msBetweenShots = 1500 + (currentWaveNumber * 50);
+                muzzleVel = 3.0f * level * currentWaveNumber;
+                if (muzzleVel > 20f)
+                    muzzleVel = 20f;
+                if (muzzleVel < 5f)
+                    muzzleVel = 5f;
+                damage = 4.0f + level + currentWaveNumber;
                 numOfMultishot = (2 * level) + currentWaveNumber;
                 delayBetweenMultipleshots = 1.0f / (level + currentWaveNumber);
             }
@@ -88,7 +127,19 @@ public class GameManager : Singleton<GameManager>
                     muzzleVel = 20f;
                 if (muzzleVel < 5f)
                     muzzleVel = 5f;
-                damage = 3.0f * level * (currentWaveNumber / 2);
+                damage = 5.0f + level + currentWaveNumber;
+                numOfMultishot = (2 * level) + currentWaveNumber;
+                delayBetweenMultipleshots = 1.0f / (level + currentWaveNumber);
+            }
+            else if (newEnemy.tag == "enemy5")
+            {
+                msBetweenShots = 1500 + (currentWaveNumber * 50);
+                muzzleVel = 3.0f * level * currentWaveNumber;
+                if (muzzleVel > 20f)
+                    muzzleVel = 20f;
+                if (muzzleVel < 5f)
+                    muzzleVel = 5f;
+                damage = 4.0f + level + currentWaveNumber;
                 numOfMultishot = (2 * level) + currentWaveNumber;
                 delayBetweenMultipleshots = 1.0f / (level + currentWaveNumber);
             }
@@ -115,6 +166,7 @@ public class GameManager : Singleton<GameManager>
     private void NextWave()
     {
         currentWaveNumber++;
+        waveNumberText.text = "Wave-> " + currentWaveNumber.ToString();
         //level++;
         print("wave: " + currentWaveNumber);
         if (currentWaveNumber - 1 < waves.Length)
@@ -124,18 +176,33 @@ public class GameManager : Singleton<GameManager>
             enemiesRemainingToSpawn = currentWave.enemyCount;
             enemiesRemainingAlive = enemiesRemainingToSpawn;
         }
-    }
-
-    private void SpawnEnemies()
-    {
-        GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool("enemy1", new Vector3(0, 0, playAreaBounds[0] + 2.0f), Quaternion.Euler(0, 180f, 0), enemyParent);
-        Enemy newEnemy = enemyObj.GetComponent<Enemy>();
-        newEnemy.InitBezier(new Vector3(Random.Range(PlayAreaBounds[2], PlayAreaBounds[3]), 0,
-                                    Random.Range(PlayAreaBounds[0], PlayAreaBounds[1])));
-        //enemyObj = ObjectPooler.Instance.SpawnFromPool("enemy4", new Vector3(0, 0, playAreaBounds[0] + 2.0f), Quaternion.Euler(0, 180f, 0), enemyParent);
-        //newEnemy = enemyObj.GetComponent<Enemy>();
-        //newEnemy.InitBezier(new Vector3(Random.Range(PlayAreaBounds[2], PlayAreaBounds[3]), 0,
-        //                    Random.Range(PlayAreaBounds[0], PlayAreaBounds[1])));
+        else
+        {
+            currentWaveNumber = 0;
+            NextWave();
+            level++;
+            Player player = playerObj.GetComponent<Player>();
+            player.healthBar.CurrentValue = player.healthBar.MaxValue;
+        }
+        levelNumberText.text = "Level-> " + level.ToString();
+        if(level == 2)
+        {
+            PlayerPrefs.SetInt("Level2", 1);
+            Debug.Log("setting level2");
+        }
+        else if(level == 3)
+        {
+            PlayerPrefs.SetInt("Level3", 1);
+        }
+        else if (level == 4)
+        {
+            PlayerPrefs.SetInt("Level4", 1);
+        }
+        else if (level == 5)
+        {
+            PlayerPrefs.SetInt("Level5", 1);
+        }
+        print("level-> " + level);
     }
 
     /// <summary>

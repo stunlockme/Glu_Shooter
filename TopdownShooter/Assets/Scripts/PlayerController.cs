@@ -5,17 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    public GameObject sideGunObj;
     Rigidbody myRigidbody;
     Vector3 velocity;
     private Renderer myRenderer;
     private Vector2 offsetSize;
+    float sideGunOffsetSize;
 
     private void Start()
     {
         myRigidbody = GetComponent<Rigidbody>();
         myRigidbody.useGravity = false;
         myRenderer = GetComponent<Renderer>();
-        offsetSize.x = myRenderer.bounds.size.x * 0.5f;
+        sideGunOffsetSize = sideGunObj.GetComponent<Renderer>().bounds.size.x + 1.0f;
+        offsetSize.x = (myRenderer.bounds.size.x * 0.5f);
         offsetSize.y = myRenderer.bounds.size.z * 0.5f;
     }
 
@@ -46,9 +49,9 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(GameManager.Instance.PlayAreaBounds[2] + offsetSize.x, transform.position.y, transform.position.z);
         }
-        else if (transform.position.x > GameManager.Instance?.PlayAreaBounds[3] - offsetSize.x) //right
+        else if (transform.position.x > GameManager.Instance?.PlayAreaBounds[3] - (offsetSize.x + sideGunOffsetSize)) //right
         {
-            transform.position = new Vector3(GameManager.Instance.PlayAreaBounds[3] - offsetSize.x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(GameManager.Instance.PlayAreaBounds[3] - (offsetSize.x + sideGunOffsetSize), transform.position.y, transform.position.z);
         }
     }
 

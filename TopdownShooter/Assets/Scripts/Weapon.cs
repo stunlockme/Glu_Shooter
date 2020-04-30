@@ -5,13 +5,11 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public Transform muzzle;
-    //public Projectile projectile;
     public float msBetweenShots = 100;
     public float muzzleVel = 35;
     public float damage = 2f;
     public int numOfMultishot = 2;
     public float delayBetweenMultipleShots = 1.0f;
-    //public Transform leftTarget, rightTarget;
     float nextShotTime;
     float turnSpeed = 10.0f;
     private Quaternion lookRight;
@@ -23,6 +21,7 @@ public class Weapon : MonoBehaviour
         Single,
         Multi,
         Bezier,
+        SingleBezier,
         MultiAndBezier
     }
     public AttackType attackType;
@@ -41,11 +40,13 @@ public class Weapon : MonoBehaviour
     }
     public BezierDir bezierDir;
     public LayerMask projectileCollisionMask;
-    private enum ProjectileType
+    public enum ProjectileType
     {
         Red,
-        Purple
+        Purple,
+        Yellow
     }
+    public ProjectileType projectileType;
 
     private void Awake()
     {
@@ -74,7 +75,7 @@ public class Weapon : MonoBehaviour
         if(Time.time > nextShotTime)
         {
             nextShotTime = Time.time + msBetweenShots / 1000f;
-            if (attackType == AttackType.Single || attackType == AttackType.Bezier)
+            if (attackType == AttackType.Single || attackType == AttackType.Bezier || attackType == AttackType.SingleBezier)
             {
                 SpawnProjectile();
             }
@@ -85,12 +86,20 @@ public class Weapon : MonoBehaviour
 
     private void SpawnProjectile()
     {
-        GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool("projectile", muzzle.position, transform.rotation, GameManager.Instance.projectileParent);
+        string projectileTag = string.Empty;
+        if (projectileType == ProjectileType.Red)
+            projectileTag = "projectile";
+        else if (projectileType == ProjectileType.Purple)
+            projectileTag = "purple";
+        else
+            projectileTag = "yellow";
+        Debug.Log("projectileTag-> " + projectileTag);
+        GameObject objFromPool = ObjectPooler.Instance?.SpawnFromPool(projectileTag, muzzle.position, transform.rotation, GameManager.Instance.projectileParent);
         Projectile newProjectile = objFromPool.GetComponent<Projectile>();
         newProjectile.Init(projectileCollisionMask, damage);
         if (weaponHolderType == WeaponHolderType.Enemy)
         {
-            if(attackType == AttackType.Bezier || attackType == AttackType.MultiAndBezier)
+            if(attackType == AttackType.Bezier || attackType == AttackType.MultiAndBezier || attackType == AttackType.SingleBezier)
             {
                 Debug.Log("attacktype-> " + attackType);
                 //newProjectile.toRotate = root;
@@ -111,7 +120,7 @@ public class Weapon : MonoBehaviour
         {
             if (attackType == AttackType.Bezier || attackType == AttackType.MultiAndBezier)
             {
-                Debug.Log("attacktype-> " + attackType);
+                //Debug.Log("attacktype-> " + attackType);
                 Vector3 target = new Vector3(0, 0, GameManager.Instance.PlayAreaBounds[0]);
                 if(GameManager.Instance.enemyParent.childCount > 0)
                     target = GameManager.Instance.enemyParent.GetChild(Random.Range(0, GameManager.Instance.enemyParent.childCount)).transform.position;
@@ -123,8 +132,6 @@ public class Weapon : MonoBehaviour
                     newProjectile.InitBezier(target, muzzle.forward);
             }
         }
-        //if (attackType == AttackType.Bezier)
-        //    newProjectile.InitBezier(new Vector3(0, 0, 0));
         newProjectile.SetSpeed(muzzleVel);
     }
 

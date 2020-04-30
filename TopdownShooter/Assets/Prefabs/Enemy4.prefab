@@ -187,8 +187,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 141706940522258800}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 500
   muzzleVel: 20
   damage: 2
@@ -200,6 +198,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
+  projectileType: 0
 --- !u!1 &141706940522258807
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,8 +386,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 4895290091385226372}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 1500
   muzzleVel: 15
   damage: 2
@@ -400,6 +397,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
+  projectileType: 0
 --- !u!1 &3813117633332610273
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,8 +446,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 216508433940805411}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 1500
   muzzleVel: 15
   damage: 2
@@ -461,6 +457,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
+  projectileType: 0
 --- !u!1 &4410465678765876032
 GameObject:
   m_ObjectHideFlags: 0
@@ -719,8 +716,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 6157158701994246739}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 1500
   muzzleVel: 15
   damage: 2
@@ -732,6 +727,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
+  projectileType: 0
 --- !u!1 &6157158701636540303
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,8 +836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 6157158702315395297}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 1500
   muzzleVel: 15
   damage: 2
@@ -853,6 +847,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
+  projectileType: 0
 --- !u!1 &6157158702311311409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,7 +1213,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b9fb058f13bd599409673132a8410b2d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1283,13 +1278,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6d16e14d7a15046b4fd70bb53adea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 60
   healthBar:
     barScript: {fileID: 4602796624790993303}
-    maxValue: 10
-    currentValue: 10
+    maxValue: 60
+    currentValue: 60
   tag: enemy4
   timeInSeconds: 2
+  pointsAwardedOnDeath: 20
 --- !u!1 &8797876941251106337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,8 +1334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 8797876941672393307}
-  projectile: {fileID: 5764035210343855626, guid: 2dd7044039b604443a8e7700e2a6cdc3,
-    type: 3}
   msBetweenShots: 500
   muzzleVel: 20
   damage: 2
@@ -1351,6 +1345,7 @@ MonoBehaviour:
   projectileCollisionMask:
     serializedVersion: 2
     m_Bits: 0
+  projectileType: 0
 --- !u!1 &8797876941276335258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,6 +1537,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3080272278302881328, guid: 70ef36435bf8cdb49a96fac4491ad41f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 3720019238135608328, guid: 70ef36435bf8cdb49a96fac4491ad41f,
         type: 3}
       propertyPath: m_Layer
@@ -1565,7 +1565,7 @@ PrefabInstance:
     - target: {fileID: 9100488148887752883, guid: 70ef36435bf8cdb49a96fac4491ad41f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9100488148887752883, guid: 70ef36435bf8cdb49a96fac4491ad41f,
         type: 3}
@@ -1656,6 +1656,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218537706465762102, guid: 70ef36435bf8cdb49a96fac4491ad41f,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70ef36435bf8cdb49a96fac4491ad41f, type: 3}

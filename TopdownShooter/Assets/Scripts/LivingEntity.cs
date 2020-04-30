@@ -14,6 +14,8 @@ public class LivingEntity : MonoBehaviour, IDamageable
     {
         health = startingHealth;
         healthBar.Initialize();
+        healthBar.MaxValue = health;
+        healthBar.CurrentValue = health;
     }
 
     public void TakeDamage(float damage, RaycastHit hit)
@@ -29,6 +31,16 @@ public class LivingEntity : MonoBehaviour, IDamageable
         if (OnDeath != null)
         {
             OnDeath();
+        }
+        Enemy enemy = gameObject.GetComponent<Enemy>();
+        if(enemy != null)
+        {
+            GameManager.Instance.score = GameManager.Instance.score + enemy.pointsAwardedOnDeath;
+            GameManager.Instance.scoreText.text = "Score-> " + GameManager.Instance.score.ToString();
+            if(GameManager.Instance.highScore < GameManager.Instance.score)
+            {
+                PlayerPrefs.SetInt("HighScore", GameManager.Instance.score);
+            }
         }
         gameObject.SetActive(false);
         gameObject.transform.parent = ObjectPooler.Instance.PoolParent;

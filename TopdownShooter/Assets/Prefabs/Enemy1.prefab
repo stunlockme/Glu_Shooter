@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b9fb058f13bd599409673132a8410b2d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,13 +123,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6d16e14d7a15046b4fd70bb53adea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 100
+  startingHealth: 60
   healthBar:
     barScript: {fileID: 7249233642868687402}
-    maxValue: 100
-    currentValue: 100
+    maxValue: 60
+    currentValue: 60
   tag: enemy1
   timeInSeconds: 2
+  pointsAwardedOnDeath: 5
 --- !u!1001 &583417020133304387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -408,6 +409,11 @@ PrefabInstance:
         type: 3}
       propertyPath: damage
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8204044388421667535, guid: aebb52ccdc962b246ae63029be552f11,
+        type: 3}
+      propertyPath: projectileType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8973965887452738692, guid: aebb52ccdc962b246ae63029be552f11,
         type: 3}

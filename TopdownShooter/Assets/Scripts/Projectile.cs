@@ -11,6 +11,13 @@ public class Projectile : MonoBehaviour
     public Vector3 destination;
     private LayerMask collisionMask;
     private float damage;
+    Vector2 offsetSize;
+
+    private void Start()
+    {
+        offsetSize.x = GetComponent<Renderer>().bounds.size.x * 0.5f;
+        offsetSize.y = GetComponent<Renderer>().bounds.size.z * 0.5f;
+    }
 
     public void Init(LayerMask _collisionMask, float _damage)
     {
@@ -20,8 +27,25 @@ public class Projectile : MonoBehaviour
 
     public void InitBezier(Vector3 target, Vector3 curveDir)
     {
-        //Debug.Log("target-> " + target + ", " + GameManager.Instance.playerObj.transform.position);       
-        pointsOnCurve = BezierCurve.Instance.PointsOnCurve(transform.position, transform.position + (curveDir * 10.0f),
+        //Debug.Log("target-> " + target + ", " + GameManager.Instance.playerObj.transform.position);
+        Vector3 middlePoint = transform.position + curveDir * 10.0f;
+        if (middlePoint.z > GameManager.Instance?.PlayAreaBounds[0] - offsetSize.y)   //top
+        {
+            middlePoint = new Vector3(middlePoint.x, middlePoint.y, GameManager.Instance.PlayAreaBounds[0] - offsetSize.y);
+        }
+        else if (middlePoint.z < GameManager.Instance?.PlayAreaBounds[1] + offsetSize.y)  //bottom
+        {
+            middlePoint = new Vector3(middlePoint.x, middlePoint.y, GameManager.Instance.PlayAreaBounds[1] + offsetSize.y);
+        }
+        else if (middlePoint.x < GameManager.Instance?.PlayAreaBounds[2] + offsetSize.x) //left
+        {
+            middlePoint = new Vector3(GameManager.Instance.PlayAreaBounds[2] + offsetSize.x, middlePoint.y, middlePoint.z);
+        }
+        else if (middlePoint.x > GameManager.Instance?.PlayAreaBounds[3] - offsetSize.x) //right
+        {
+            middlePoint = new Vector3(GameManager.Instance.PlayAreaBounds[3] - offsetSize.x, middlePoint.y, middlePoint.z);
+        }
+        pointsOnCurve = BezierCurve.Instance.PointsOnCurve(transform.position, middlePoint,
             target, 7.0f);
         destination = pointsOnCurve.Dequeue();
     }
